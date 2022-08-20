@@ -13,4 +13,4 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
       - name: run code
-        run: python FNplus.py -u ${{secrets.USERNAME}} -p ${{secrets.PASSWORD}}
+        run: python main.py -u ${{secrets.USERNAME}} -p ${{secrets.PASSWORD}}
