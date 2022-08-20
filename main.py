@@ -9,13 +9,13 @@ import re
 import requests
 
 # 登录地址
-LOGIN_URL = 'https://my.freenom.com/dologin.php'
+LOGIN_URL = 'http://my.freenom.com/dologin.php'
 
 # 域名状态地址
-DOMAIN_STATUS_URL = 'https://my.freenom.com/domains.php?a=renewals'
+DOMAIN_STATUS_URL = 'http://my.freenom.com/domains.php?a=renewals'
 
 # 域名续期地址
-RENEW_DOMAIN_URL = 'https://my.freenom.com/domains.php?submitrenewals=true'
+RENEW_DOMAIN_URL = 'http://my.freenom.com/domains.php?submitrenewals=true'
 
 # token 正则
 token_ptn = re.compile('name="token" value="(.*?)"', re.I)
@@ -36,6 +36,7 @@ args = parser.parse_args()
 username = args.username
 password = args.password
 
+os.environ["http_proxy"] = "http://183.239.61.204:9091"
 
 
 class FreeNom:
@@ -43,14 +44,15 @@ class FreeNom:
         self._u = username
         self._p = password
         self._s = requests.Session()
+        self._s.max_redirects=999
         self._s.headers.update({
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/79.0.3945.130 Safari/537.36'
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'
         })
 
     def _login(self) -> bool:
         self._s.headers.update({
             'content-type': 'application/x-www-form-urlencoded',
-            'referer': 'https://my.freenom.com/clientarea.php'
+            'referer': 'http://my.freenom.com/clientarea.php'
         })
         r = self._s.post(LOGIN_URL, data={
                          'username': self._u, 'password': self._p})
@@ -68,7 +70,7 @@ class FreeNom:
 
         # check domain status
         self._s.headers.update(
-            {'referer': 'https://my.freenom.com/clientarea.php'})
+            {'referer': 'http://my.freenom.com/clientarea.php'})
         r = self._s.get(DOMAIN_STATUS_URL)
 
         # login status check
@@ -93,8 +95,9 @@ class FreeNom:
             days = int(days)
             if days < 14:
                 self._s.headers.update({
-                    'referer': f'https://my.freenom.com/domains.php?a=renewdomain&domain={renewal_id}',
-                    'content-type': 'application/x-www-form-urlencoded'
+                    'referer': f'http://my.freenom.com/domains.php?a=renewdomain&domain={renewal_id}',
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'origin': 'http://my.freenom.com',
                 })
                 r = self._s.post(RENEW_DOMAIN_URL, data={
                     'token': token,
