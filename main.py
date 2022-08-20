@@ -37,16 +37,6 @@ username = args.username
 password = args.password
 
 
-def qlnotify(desp):
-    cur_path = os.path.abspath(os.path.dirname(__file__))
-    if os.path.exists(cur_path + "/notify.py"):
-        try:
-            from notify import send
-        except Exception:
-            print("加载通知服务失败~")
-        else:
-            send('Freenom 续期', desp)
-
 
 class FreeNom:
     def __init__(self, username: str, password: str):
@@ -142,4 +132,3 @@ if len(user_list) != len(passwd_list):
 for i in range(len(user_list)):
     instance = FreeNom(user_list[i], passwd_list[i])
     instance.renew()
-    qlnotify(msg)
