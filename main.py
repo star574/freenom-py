@@ -36,7 +36,7 @@ args = parser.parse_args()
 username = args.username
 password = args.password
 
-os.environ["http_proxy"] = "http://183.239.61.204:9091"
+# os.environ["http_proxy"] = "http://183.239.61.204:9091"
 
 
 class FreeNom:
