@@ -11,6 +11,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - name: run code
-        run: python main.py -u ${{secrets.USERNAME}} -p ${{secrets.PASSWORD}}
+        run: python ./main.py -u ${{secrets.USERNAME}} -p ${{secrets.PASSWORD}}
